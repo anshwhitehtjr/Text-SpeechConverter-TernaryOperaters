@@ -2,13 +2,14 @@ import * as React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import * as Speech from 'expo-speech';
 import { Header } from 'react-native-elements';
-import { SafeAreaProvider } from 'react-native-safe-area-context'; 
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default class App extends React.Component {
   constructor() {
     super();
     this.state = {
       text: '',
+      buttonPressed: ''
     }
   }
 
@@ -17,31 +18,42 @@ export default class App extends React.Component {
     Speech.speak(thingToSay);
   }
 
+  goButton = () => {
+    this.state.text === '' && this.state.buttonPressed === true 
+    ? alert("TextInput is empty") 
+    : this.speak()
+
+    this.setState({
+      buttonPressed: true
+    })
+  }
+
   render() {
     return (
       <SafeAreaProvider>
-      <View style={styles.container}>
-        <Header
-          leftComponent={{ icon: 'menu', color: '#fff' }}
-          centerComponent={{ text: 'Text to Speech Converter', style: { color: '#fff' ,marginHorizontal: 30} }}
-          rightComponent={{ icon: 'home', color: '#fff' }}
-        />
+        <View style={styles.container}>
+          <Header
+            leftComponent={{ icon: 'menu', color: '#fff' }}
+            centerComponent={{ text: 'Text to Speech Converter', style: { color: '#fff', marginHorizontal: 30 } }}
+            rightComponent={{ icon: 'home', color: '#fff' }}
+          />
 
-        <TextInput value={this.state.text}
-          style={styles.InputBox}
-          onChangeText={(text) => {
-            this.setState({
-              text: text
-            })
-          }}>
-        </TextInput>
-        <TouchableOpacity style={styles.goButton} onPress={this.speak} >
-          <Text>
-            Go
-          </Text>
-        </TouchableOpacity>
-      </View>
+          <TextInput value={this.state.text}
+            style={styles.InputBox}
+            onChangeText={(text) => {
+              this.setState({
+                text: text
+              })
+            }}>
+          </TextInput>
+          <TouchableOpacity style={styles.goButton} onPress={ this.goButton } >
+            <Text>
+              Go
+            </Text>
+          </TouchableOpacity>
+        </View>
       </SafeAreaProvider>
+      // this.state.text === '' && this.state.buttonPressed === true ? alert("TextInput is empty") : this.speak
     );
   }
 }
